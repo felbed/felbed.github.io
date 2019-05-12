@@ -1,0 +1,5 @@
+---
+title: "Mi web"
+---
+
+Hola, este es mi nueva página. En ella, compartiré todo lo relacionado con mis notas de clase, trabajos y proyectos de mi semestre. Soy estudiante de estadística de la Universidad Nacional de Colombia sede Medellín, futuro científico de datos.

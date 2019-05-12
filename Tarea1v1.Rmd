@@ -1,0 +1,317 @@
+---
+title: "Solución Tarea 1"
+subtitle: "Muestreo Estadístico"
+date: "14 de mayo de 2019"
+output:
+  html_document:
+    includes:
+      in_header: mystyles.tex
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Integrantes del grupo
+
+```{r bibliotecas, include=FALSE}
+library(gtools)
+```
+
+\begin{table}[h!]
+\begin{flushleft}
+ \begin{tabular}{||l c||} 
+ \hline
+ Nombre & Cédula \\ [0.5ex] 
+ \hline\hline
+ Esteban Moreno Rodríguez & 1152459914 \\ 
+ \hline
+ Luis Felipe Bedoya Martínez & 1088015006 \\ 
+ \hline
+ Sergio Iván Figueroa Sierra & 1031156865 \\
+ \hline
+ Yuberth Anderson Saavedra Coneo & Campo \\ [0.5ex] 
+ \hline
+\end{tabular}
+\end{flushleft}
+\end{table}
+
+<!-- |               Nombre              |   Cedúla    | -->
+<!-- | :-------------------------------: | :---------: | -->
+<!-- | Esteban Moreno Rodríguez          | 1152459914  | -->
+<!-- | Luis Felipe Bedoya Martínez       | 1088015006  | -->
+<!-- | Sergio Iván Figueroa Sierra       | 1031156865  | -->
+<!-- | Yuberth Anderson Saavedra Coneo   | Campo       | -->
+
+Ejercicio
+
+Se tiene una población hipotética de tamaño $N = 7$. Los valores de la variable de interés para los siete elementos u objetos de la población son: $13$, $18$, $6$, $9$, $16$, $11$ y $14$.
+
+1) ¿Cuántas muestras posibles sin reemplazo de tamaño $n = 3$ pueden seleccionarse?
+
+Las muestras posibles son las combinaciones de a tres elementos entre los siete sin tener en cuenta su orden.
+
+\[
+{C_{n}^{N}=\binom{N}{n}=\frac{N!}{n!(N-n)!}=\frac{7!}{3!(7-3)!}=\frac{7!}{3!\,4!}=\frac{(7)(6)(5)\,\cancel{4}!}{3!\,\cancel{4}!}=\frac{(7)\cancel{6}(5)}{\cancelto{\cancel{6}}{3!}}=35}
+\]
+
+A continuación se presenta un código en $R$ para calcularlo.
+```{r 1er punto}
+N = 7
+n = 3
+valores <- c(13, 18, 6, 9, 16, 11, 14)
+muestras <- combinations(length(valores), n, valores)
+nrow(muestras)
+```
+```{r eval=FALSE, include=FALSE}
+# "
+# Otra forma de calcularlo
+# factorial(N) / (factorial(n) * (factorial(N-n)))
+# "
+```
+
+2) Seleccione todas las muestras posibles de tamaño $n = 3$.
+
+Las muestras de tamaño tres extraídas de la población son:
+```{r 2do punto}
+muestras
+```
+
+3) Calcule la media, la varianza $S^2$, la varianza $S_{n}^{2}$ y el total muestral de cada una de dichas muestras.
+
+El cálculo de estos estadísticos se realiza mediante las siguientes ecuaciones: 
+
+La media muestral es: 
+\[
+\bar{y}=\frac{\sum_{i=1}^{n}y_{i}}{n}
+\]
+
+La varianza(cuasivarianza) muestral es:
+\[
+s^2=\frac{\sum_{i=1}^{n}(y_{i}-\bar{y})^2}{n-1}
+\]
+
+La varianza(simple) muestral es:
+\[
+s_{n}^{2}=\frac{\sum_{i=1}^{n}(y_{i}-\bar{y})^2}{n}
+\]
+
+El total muestral es:
+\[
+y=\sum_{i=1}^{n}y_{i}
+\]
+
+La desviación estándar muestral es:
+\[
+s=\sqrt{s^2}
+\]
+
+```{r include=FALSE}
+#Crea un vector con las muestras escritas para mostrarlas
+unidades <- vector(mode = "character", length = nrow(muestras))
+for(i in 1:nrow(muestras)){
+  unidades[i] <- capture.output(cat(muestras[i, 1],"",muestras[i,2],"",muestras[i,3]))
+}
+
+# " 
+# Otras formas de calcular la media
+# rowMeans(muestras)
+# rowSums(muestras)/n 
+# "
+# 
+# "
+# Otra forma de calcular S^2
+# rowSums(matrix((c(muestras) - rep(apply(muestras, 1, mean),3))^2, nrow = 35, ncol = 3))/(n-1)
+# "
+```
+
+El código en $R$ usado para calcular cada una de las estadísticas anteriores se expone en el siguiente cuadro, y, la tabla que le sigue recopila toda la información calculada. 
+
+```{r 3er punto}
+# Media Muestrales
+ym <-apply(muestras, 1, mean)
+# Varianzas(cuasivarianzas) muestrales
+SS <- apply(muestras, 1, var)
+# Varianzas(simples) muestrales
+SSn <- rowSums(matrix((c(muestras) - rep(apply(muestras, 1, mean),3))^2, 
+                      nrow = nrow(muestras), ncol = 3))/n
+# Desviación estándar ó raíz cuadrada de S^2 (sigma)
+S <- apply(muestras, 1, sd)
+# Totales muestrales
+a <- rowSums(muestras)
+```
+
+```{r echo=FALSE}
+data.frame(Unidades = unidades, Total = a, MediaMuestral = ym, Varianza = SS,  VarSimple = SSn, DesvEstandar = S)
+```
+
+4) Hallar la distribución muestral de las medias y de las varianzas $s^{2}$ y $s_{n}^{2}$.
+
+Con la información obtenida en los puntos anteriores hacemos las tablas de frecuencia correspondientes de cada estimador. Conocidas como distribuciones muestrales. 
+
+La distribución muestral de las medias $\bar{y}$ es:
+
+\begin{table}[ht!]
+\begin{flushleft}
+\begin{tabular}{ c|c c c c c c c c c c c c c c c c c c c|c} 
+ $\bar{y}$ & $\frac{26}{3}$ & $\frac{28}{3}$ & $\frac{29}{3}$ & $10$ & $\frac{31}{3}$ & $11$ & $\frac{34}{3}$ & $\frac{35}{3}$ & $12$ & $\frac{37}{3}$ & $\frac{38}{3}$ & $13$ & $\frac{40}{3}$ & $\frac{41}{3}$ & $14$ & $\frac{43}{3}$ & $15$ & $\frac{47}{3}$ & $16$ & Total \\ [1ex] \hline\hline \\
+ $\pi_{i}$ & $\frac{1}{35}$ & $\frac{1}{35}$ & $\frac{1}{35}$ & $\frac{1}{35}$ & $\frac{2}{35}$ & $\frac{4}{35}$ & $\frac{1}{35}$ & $\frac{2}{35}$ & $\frac{3}{35}$ & $\frac{1}{35}$ & $\frac{4}{35}$ & $\frac{1}{35}$ & $\frac{3}{35}$ & $\frac{2}{35}$ & $\frac{1}{35}$ & $\frac{3}{35}$ & $\frac{2}{35}$ & $\frac{1}{35}$ & $\frac{1}{35}$ & $1$ \\ [0.5ex]
+\end{tabular}
+\end{flushleft}
+\end{table}
+
+La distribución muestral de las varianzas (cuasivaranzas) $s^2$ es:
+
+\begin{table}[ht!]
+\begin{flushleft}
+\begin{tabular}{ c|c c c c c c c c c c c c c c c c c|c} 
+ $s^2$ & $\frac{7}{3}$ & $4$ & $\frac{19}{3}$ & $7$ & $\frac{37}{3}$ & $13$ & $\frac{49}{3}$ & $19$ & $\frac{61}{3}$ & $\frac{67}{3}$ & $25$ & $\frac{79}{3}$ & $28$ & $\frac{109}{3}$ & $\frac{112}{3}$ & $39$ & $\frac{125}{3}$ & Total \\ [1ex] \hline\hline \\
+ $\pi_{i}$ & $\frac{2}{35}$ & $\frac{2}{35}$ & $\frac{5}{35}$ & $\frac{2}{35}$ & $\frac{3}{35}$ & $\frac{5}{35}$ & $\frac{2}{35}$ & $\frac{1}{35}$ & $\frac{2}{35}$ & $\frac{2}{35}$ & $\frac{1}{35}$ & $\frac{2}{35}$ & $\frac{1}{35}$ & $\frac{2}{35}$ & $\frac{1}{35}$ & $\frac{1}{35}$ & $\frac{1}{35}$ & $1$ \\ [0.5ex]
+\end{tabular}
+\end{flushleft}
+\end{table}
+
+La distribución muestral de las varianzas (simples) $s_{n}^{2}$ es:
+
+\begin{table}[ht!]
+\begin{flushleft}
+\begin{tabular}{ c|c c c c c c c c c c c c c c c c c|c} 
+ $s_{n}^{2}$ & $\frac{14}{9}$ & $\frac{8}{3}$ & $\frac{38}{9}$ & $\frac{14}{3}$ & $\frac{74}{9}$ & $\frac{26}{3}$ & $\frac{98}{9}$ & $\frac{38}{3}$ & $\frac{122}{9}$ & $\frac{134}{9}$ & $\frac{50}{3}$ & $\frac{158}{9}$ & $\frac{56}{3}$ & $\frac{218}{9}$ & $\frac{224}{9}$ & $26$ & $\frac{248}{9}$ & Total \\ [1ex] \hline\hline \\
+ $\pi_{i}$ & $\frac{2}{35}$ & $\frac{2}{35}$ & $\frac{5}{35}$ & $\frac{2}{35}$ & $\frac{3}{35}$ & $\frac{5}{35}$ & $\frac{2}{35}$ & $\frac{1}{35}$ & $\frac{2}{35}$ & $\frac{2}{35}$ & $\frac{1}{35}$ & $\frac{2}{35}$ & $\frac{1}{35}$ & $\frac{2}{35}$ & $\frac{1}{35}$ & $\frac{1}{35}$ & $\frac{1}{35}$ & $1$ \\ [0.5ex]
+\end{tabular}
+\end{flushleft}
+\end{table}
+
+```{r include=FALSE}
+# Distribución muestral de las medias
+dmym <- data.frame(table(ym))
+dmym$Freq <- dmym$Freq/nrow(muestras)
+#sum(dmym$Freq) == 1
+```
+```{r include=FALSE}
+# Distribución muestral de SS
+dmSS <- data.frame(table(SS))
+dmSS$Freq <- dmSS$Freq/nrow(muestras)
+# sum(dmSS$Freq) == 1
+```
+```{r include=FALSE}
+# Distribución muestral de SSn
+dmSSn <- data.frame(table(SSn))
+dmSSn$Freq <- dmSSn$Freq/nrow(muestras)
+# sum(dmSnS$Freq) == 1
+```
+
+```{r include=FALSE}
+# Distribución muestral de a
+dma <- data.frame(table(a))
+dma$Freq <- dma$Freq/nrow(muestras)
+# sum(dmSnS$Freq) == 1
+```
+
+Definimos la media de la distribución de un estimador $\widehat{\theta}$, como:
+
+\[
+E[\widehat{\theta}]=\sum_{i=1}^{v}{\widehat{\theta_{i}}{\pi_{i}}}
+\]
+
+donde: $v$ el número total de valores distintos tomados por el estimador, $\widehat{\theta_{i}}$ es la i-ésima estimación diferente de $\theta$ y $\pi_{i}$ la probabilidad de que el estimador tome el valor $\widehat{\theta}$. Esta probabilidad es igual a la frecuencia relativa de las estimaciones.
+
+Este resultado será usado en los siguientes puntos.
+
+5) Compruebe que la media de las medias muestrales es igual a la media poblacional, ie. verifíque que la media muestral es un estimador insesgado de la media poblacional.
+
+\[
+E[\bar{y}]=\sum_{i=1}^{n}\bar{y_{i}}\pi_{i} = \mu = \frac{\sum_{i=1}^{N}Y_{i}}{N}
+\]
+
+```{r 5to punto}
+# Media de las medias muestrales
+sum(dmym$Freq*as.double(as.character(dmym$ym)))
+# Media poblacional
+mean(valores)
+```
+
+6) Compruebe que la media de las varianzas muestrales $s^2$ es igual a la varianza poblacional;
+ie. verifíque que la varianza muestral $s^2$ es un estimador insesgado de la varianza poblacional.
+\[
+E[s^2]=\sum_{i=1}^{n}s^2\pi_{i} = \sigma^2 = Var[Y]=\frac{\sum_{i=1}^{N}(Y_{i}-\bar{Y})^2}{N-1}
+\]
+```{r 6to punto}
+# Media de las varianzas(cuasivarianzas) muestrales
+sum(dmSS$Freq*as.double(as.character(dmSS$SS)))
+# Varianza poblacional
+var(valores)
+```
+
+7) Compruebe que la media de las varianzas muestrales $s_{n}^{2}$ no es igual a la varianza poblacional; ie. verifíque que la varianza muestral $s_{n}^{2}$ es un estimador sesgado de la varianza poblacional. Hallar el sesgo de dicho estimador.
+
+\[
+E[s_{n}^{2}]=\sum_{i=1}^{n}s_{n}^{2}\pi_{i} \neq \sigma^2 = Var[Y]=\frac{\sum_{i=1}^{N}(Y_{i}-\bar{Y})^2}{N-1}
+\]
+
+El sesgo se define como:
+\[
+B[\hat{\theta}]=E[\hat{\theta}]-\theta
+\]
+
+```{r 7mo punto}
+# Media de las varianzas(simples) muestrales
+sum(dmSSn$Freq*as.double(as.character(dmSSn$SSn)))
+# Varianza poblacional
+var(valores)
+# Valor de B 
+mean(SSn) - sum((c(valores) - mean(valores))^(2))/n
+```
+```{r, eval=FALSE, include=FALSE}
+# "
+# Otra forma de calcular la varianza poblacional
+# mean(SS)
+# "
+```
+
+8) Compruebe que la media de los totales muestrales es igual al total poblacional; ie. verifíque que el total muestral es un estimador insesgado del total poblacional.
+
+Falta corregir este punto
+Falta corregir este punto
+Falta corregir este punto
+```{r include=FALSE}
+# Distribución muestral de a
+dma <- data.frame(table(a))
+dma$Freq <- dma$Freq/nrow(muestras)
+# sum(dmSnS$Freq) == 1
+```
+```{r 8vo punto}
+# Media de los totales muestrales
+sum(dma$Freq*as.double(as.character(dma$a)))
+mean(a)
+# Total poblacional
+sum(valores)
+```
+9) Seleccione una de todas las muestras posibles mediante M.A.S y realice las estimaciones de la media poblacional y del total poblacional, junto con sus respectivos $B=L.E.E.$ Interprete los resultados.
+
+Falta escribir la interpretación de los resultados
+Falta escribir la interpretación de los resultados
+Falta escribir la interpretación de los resultados
+```{r 9no punto}
+# Selección de la fila de la matrix
+MAS <- sample(1:35, 1, replace = FALSE, prob = rep(1/35,35))
+MAS
+uMAS <- muestras[MAS,]
+uMAS
+mean(uMAS)
+sum(uMAS)
+2*sqrt(var(uMAS))
+N*2*sqrt(var(uMAS))
+```
+
+10) Probar:
+\[
+Var[\bar{y}]=(1-\frac{n}{N})\frac{\sigma^2}{n} 
+\]
+
+```{r 10mo punto}
+# Varianza de la media muestral
+sum(((as.double(as.character(dmym$ym))-mean(valores))^2)*dmym$Freq)
+# Varianza de la media muestral en el M.A.S
+(1-(n/N))*(var(valores)/n)
+```

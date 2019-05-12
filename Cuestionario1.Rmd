@@ -1,0 +1,64 @@
+---
+title: "Cuestionario sobre el capítulo 1"
+output:
+  html_document:
+    df_print: paged
+---
+1) ¿Qué es el análisis de regresión?
+Es una técnica estadística para investigar y modelar la relación entre variables.
+
+2) ¿Qué es un error?
+Es una variable aleatoria que explica por qué el modelo no ajusta exactamente los datos.
+
+3) ¿Cúal es el riesgo de extrapolar en regresión? Use la figura 1.5 para sustentar su afirmación
+
+4) ¿Es correcto decir que $\bar{y}$ representa el valor ajustado, estimado o calculado para $y$?
+
+5) ¿Cuáles son las dos fases iterativas en análisis de regresión?
+
+6) Según el penúltimo párrafo de la página 5, ¿puede un modelo de regresión demostrar relaciones de causa-efecto?
+
+7) ¿Qué diferencia hay entre causalidad, casualidad y asociación? Intente explicar las diferencias por medio de ejemplos.
+
+8) ¿Cuáles son los tres métodos básicos para recolectar datos?
+
+9) ¿Cuál es el mejor método para recolectar datos?
+
+10) A continuación se presenta una tabla con algunos delos ejercioes propuestos en el capítulo 2. Lo que usted debe hacer es leer el enunciado de ese ejercicio e identificar si es un estudio retrospectivo, observacional o experimental.
+
+\begin{table}[h!]
+\begin{center}
+ \begin{tabular}{|c l|} 
+ \hline
+ Ejercicio & ¿Retrospectivo, observacional o experimental? \\ \hline
+ $2.7$ &   \\ \hline
+ $2.10$ &  \\ \hline
+ $2.13$ &  \\ \hline
+ $2.16$ &  \\ [0.5ex] 
+ \hline
+\end{tabular}
+\end{center}
+\end{table}
+
+11) ¿Cuáles son los cuatro usos que los autores plantean para el análisis de regresión?
+
+12) A continuación se presentan varias preguntas que sean han intentado responder en el programa cazadores de mitos. Para cada uno de ellas identifique la variable respuesta y sus unidades, los factores o variables explicativas.
+
+\begin{table}[h!]
+\begin{center}
+ \begin{tabular}{|c c c|} 
+ \hline
+ Mito & Variable respuesta & Factores o variables explicativas \\ \hline
+ ¿Consume menos combustible un automóvil sucio que uno limpio? &  &   \\ \hline
+ ¿Se moja uno menos si corre o camina en la lluvia? &  &   \\ \hline
+ ¿Es más rápido un auto con la carrocería al revés? &  &   \\ \hline
+ ¿Puedes dar positivo en un test de heroína por comer una gran cantidad de semillas de amapola? &  &  \\ \hline
+ ¿Se puede engañar a los alcoholímetros? &  &  \\ \hline
+ ¿Puede una tubería de PVC acumular suficiente electricidad estática para matar? &  &  \\ \hline
+ ¿Pueden los naipes de la baraja matar si se arrojan con suficiente fuerza? &  &  \\ 
+ \hline
+\end{tabular}
+\end{center}
+\end{table}
+
+13) Piense un experimento que usted pueda hacer y en el cual la variable respuesta sea cuantitativa con al menos dos regresores, uno cuantitativo y otro cualitativo.
